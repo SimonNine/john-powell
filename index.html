@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Film Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<!-- ─── SPLASH / LOADER ─── -->
+<div id="loader">
+  <div class="loader-video-bg">
+    <iframe src="https://www.youtube-nocookie.com/embed/dogHOIdjefc?autoplay=1&mute=1&loop=1&playlist=dogHOIdjefc&controls=0&showinfo=0&rel=0&modestbranding=1&start=10"
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen frameborder="0"></iframe>
+  </div>
+  <div class="loader-overlay"></div>
+  <div class="loader-inner">
+    <div class="loader-name">
+      <div class="loader-clip"><span class="loader-word w1" id="ll1"></span></div>
+      <div class="loader-clip"><span class="loader-word w2" id="ll2"></span></div>
+    </div>
+    <div class="loader-rule" id="loader-rule"></div>
+    <div class="loader-role" id="loader-role"></div>
+    <button class="loader-enter-btn" id="loader-enter-btn">
+      <span class="loader-enter-text">Enter Site</span>
+      <span class="loader-enter-ring"></span>
+    </button>
+  </div>
+  <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+</div>
+
+<!-- ─── HEADER ─── -->
+<header id="header">
+  <div class="hdr-left" id="hdr-clock">03:47 PM / LOS ANGELES</div>
+
+  <a href="index.html" class="hdr-logo">
+    <span class="logo-line"></span>
+    <span class="logo-line large"></span>
+  </a>
+
+  <div class="hdr-right">
+    <nav class="hdr-nav">
+      <a href="#work">Work</a>
+      <a href="#videos">Watch</a>
+      <a href="#bio">About</a>
+      <a href="#press">Press</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="hdr-divider"></div>
+    <div class="hdr-controls">
+      <button class="mode-btn active" id="btn-light" title="Light mode">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="mode-btn" id="btn-dark" title="Dark mode">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-fullscreen" id="btn-fullscreen" title="Fullscreen">⊞</button>
+    </div>
+  </div>
+</header>
+
+<!-- ─── CARDS CURSOR (follows mouse over hero film cards) ─── -->
+<div id="cards-cursor" aria-hidden="true">
+  <span class="cc-text">EXPLORE<br>THE SCORE</span>
+</div>
+
+<!-- ─── CONTACT CURSOR (disk cursor, shows only on button hover) ─── -->
+<div id="contact-cursor" aria-hidden="true">
+  <span class="cc-text">GET IN<br>TOUCH</span>
+</div>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+
+  <!-- Fan Cards -->
+  <div id="cards-wrap">
+    <div class="h-card" id="hc1">
+      <img id="hc1-img" src="" alt="Film still" style="object-position: 20% center;">
+      <div class="card-badge" aria-hidden="true">
+        <span class="card-badge-text">EXPLORE<br>THE SCORE</span>
+      </div>
+    </div>
+    <div class="h-card" id="hc2">
+      <img id="hc2-img" src="" alt="Film still" style="object-position: center 25%;">
+      <div class="h-card-video active" id="hc2-video">
+        <iframe src="https://www.youtube-nocookie.com/embed/dogHOIdjefc?autoplay=1&mute=1&loop=1&playlist=dogHOIdjefc&controls=0&showinfo=0&rel=0&modestbranding=1&start=10" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen frameborder="0"></iframe>
+      </div>
+      <div class="card-badge" aria-hidden="true">
+        <span class="card-badge-text">EXPLORE<br>THE SCORE</span>
+      </div>
+    </div>
+    <div class="h-card" id="hc3">
+      <img id="hc3-img" src="" alt="Film still" style="object-position: 78% center;">
+      <div class="card-badge" aria-hidden="true">
+        <span class="card-badge-text">EXPLORE<br>THE SCORE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide title — mix-blend-mode:difference renders as x-ray over cards -->
+  <div id="hero-title" aria-hidden="true">
+    <span id="hero-title-text">BRIAN TYLER</span>
+  </div>
+
+  <!-- CTA -->
+  <div class="hero-cta" id="hero-cta">
+    <button class="hero-cta-btn cta-discover animating" id="hero-cta-btn">
+      <span class="hero-cta-icon">↓</span>
+      <span class="hero-cta-text">Behind the Man</span>
+    </button>
+  </div>
+
+  <!-- Ticker -->
+  <div class="hero-ticker-section">
+    <div class="ticker-dot-line"></div>
+    <div class="ticker-row">
+      <button class="ticker-prev" id="ticker-prev">&#8592;</button>
+      <div class="ticker-overflow" id="ticker-overflow">
+        <div class="ticker-inner" id="ticker-inner"></div>
+      </div>
+      <button class="ticker-next" id="ticker-next">&#8594;</button>
+    </div>
+    <div class="ticker-dot-line"></div>
+  </div>
+
+</section>
+
+<!-- ─── WORK / FILMS ─── -->
+<section id="work">
+  <div class="container">
+    <span class="section-eyebrow reveal">Selected Scores</span>
+    <h2 class="section-title reveal">FILM</h2>
+    <ul class="films-list" id="films-list"></ul>
+  </div>
+</section>
+
+<!-- ─── TELEVISION ─── -->
+<section id="television">
+  <div class="container">
+    <span class="section-eyebrow reveal">Small Screen</span>
+    <h2 class="section-title reveal">TELEVISION</h2>
+    <ul class="films-list" id="tv-list"></ul>
+  </div>
+</section>
+
+<!-- ─── VIDEOS ─── -->
+<section id="videos">
+  <div class="container">
+    <span class="section-eyebrow reveal">Film Trailers &amp; Studio Sessions</span>
+    <h2 class="section-title reveal">WATCH</h2>
+    <div class="videos-grid" id="videos-grid"></div>
+  </div>
+</section>
+
+<!-- ─── SPOTIFY ─── -->
+<section id="spotify">
+  <div class="container">
+    <div class="spotify-inner">
+      <div class="spotify-text reveal">
+        <span class="section-eyebrow">Stream the Scores</span>
+        <h2 class="section-title">LISTEN</h2>
+        <p class="spotify-desc"></p>
+      </div>
+      <div class="spotify-embed-wrap reveal">
+        <div class="lp-shelf-wrap" aria-hidden="true">
+          <div class="shelf-lp"><div class="shelf-lp-label" style="background-image:url('https://image.tmdb.org/t/p/w780/xZFRxfZKwEnvPpwq0RHdU8hmvqF.jpg')"></div></div>
+          <div class="shelf-lp"><div class="shelf-lp-label" style="background-image:url('https://image.tmdb.org/t/p/w780/9n2tJBplPbgR2ca05hS5CKXwP2c.jpg')"></div></div>
+          <div class="shelf-lp"><div class="shelf-lp-label" style="background-image:url('https://image.tmdb.org/t/p/w780/bhXcS4m37eYwM85Avp7SWRmnrpn.jpg')"></div></div>
+          <div class="shelf-lp"><div class="shelf-lp-label" style="background-image:url('https://image.tmdb.org/t/p/w780/7tTCnQcKzUkabDV3BJMe7LIzlEs.jpg')"></div></div>
+        </div>
+        <button class="lp-cta-btn" onclick="openLPBrowser()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          Open the Score Player
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BIO ─── -->
+<section id="bio">
+  <div class="bio-video-wrap">
+    <iframe src="https://www.youtube-nocookie.com/embed/dogHOIdjefc?autoplay=1&mute=1&loop=1&playlist=dogHOIdjefc&controls=0&showinfo=0&rel=0&modestbranding=1"
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen frameborder="0"></iframe>
+  </div>
+  <div class="bio-overlay"></div>
+  <div class="bio-content">
+    <div class="container">
+      <div class="bio-grid">
+        <div class="bio-left">
+          <span class="bio-label reveal">The Composer</span>
+          <h2 class="bio-heading reveal"></h2>
+          <p class="bio-text reveal"></p>
+          <p class="bio-text reveal" style="margin-top:20px;"></p>
+        </div>
+        <div class="bio-right">
+          <div class="bio-stats">
+            <div class="bio-stat reveal">
+              <span class="stat-num">200+</span>
+              <span class="stat-label">Film &amp; TV Credits</span>
+            </div>
+            <div class="bio-stat reveal">
+              <span class="stat-num">$14B</span>
+              <span class="stat-label">Global Box Office</span>
+            </div>
+            <div class="bio-stat reveal">
+              <span class="stat-num">30+</span>
+              <span class="stat-label">Years of Scores</span>
+            </div>
+            <div class="bio-stat reveal">
+              <span class="stat-num">4</span>
+              <span class="stat-label">Award Nominations</span>
+            </div>
+          </div>
+          <div class="bio-awards reveal">
+            <div class="bio-award-item">
+              <span class="award-bullet">◆</span>
+              <span class="award-text">Emmy Award Winner — Outstanding Main Title Theme Music (Yellowstone)</span>
+            </div>
+            <div class="bio-award-item">
+              <span class="award-bullet">◆</span>
+              <span class="award-text">Golden Globe Nomination — Crazy Rich Asians Original Score</span>
+            </div>
+            <div class="bio-award-item">
+              <span class="award-bullet">◆</span>
+              <span class="award-text">ASCAP Film &amp; TV Award — Multiple years for Top Box Office Film</span>
+            </div>
+            <div class="bio-award-item">
+              <span class="award-bullet">◆</span>
+              <span class="award-text">Recorded at Abbey Road Studios, Capitol Studios &amp; Synchron Stage Vienna</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRESS ─── -->
+<section id="press">
+  <div class="container">
+    <span class="section-eyebrow reveal">In the News</span>
+    <h2 class="section-title reveal">PRESS</h2>
+    <div class="press-grid" id="press-grid">
+      <div class="press-loading" id="press-loading">
+        <span class="press-loading-dot"></span>
+        <span class="press-loading-dot"></span>
+        <span class="press-loading-dot"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <!-- Cursor follower orb — moves with mouse inside section -->
+  <div class="contact-orb" id="contact-orb"></div>
+
+  <div class="contact-inner">
+    <div class="contact-top reveal">
+      <span class="contact-eyebrow">SCORING INQUIRIES &nbsp;◆&nbsp; SYNC LICENSING &nbsp;◆&nbsp; PRESS</span>
+    </div>
+
+    <h2 class="contact-big-heading reveal">
+      <span class="contact-word">LET'S</span>
+      <span class="contact-word contact-word-gold">MAKE</span>
+      <span class="contact-word">NOISE.</span>
+    </h2>
+
+    <div class="contact-cta-row reveal">
+      <a class="contact-magnetic-btn" id="contact-magnetic-btn" href="#">
+        <span class="cmb-label"></span>
+        <span class="cmb-arrow">↗</span>
+      </a>
+    </div>
+
+    <div class="contact-bottom reveal">
+      <span class="contact-rule"></span>
+      <span class="contact-tagline"></span>
+      <span class="contact-rule"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LIGHTBOX ─── -->
+<div id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <!-- Thumbnail shown first; iframe only injected on explicit user play click -->
+  <div id="lightbox-thumb-wrap">
+    <img id="lightbox-thumb" src="" alt="">
+    <button id="lightbox-play-btn" aria-label="Play video">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+        <polygon points="32,24 60,40 32,56" fill="white"/>
+      </svg>
+    </button>
+  </div>
+  <iframe id="lightbox-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display:none;"></iframe>
+</div>
+
+<!-- ─── LP BROWSER ─── -->
+<div id="lp-browser" aria-hidden="true">
+  <button class="lp-close-btn" id="lp-close-btn" title="Close">×</button>
+  <p class="lp-eyebrow">Crate Dig</p>
+  <h2 class="lp-heading">SELECT A SCORE</h2>
+  <div class="lp-grid" id="lp-grid"></div>
+  <p class="lp-hint">Click a record to load it into the player</p>
+</div>
+
+<!-- ─── MINIDISC ─── -->
+<button class="md-restore-tab" id="md-restore-tab" title="Open player">
+  <div class="md-restore-disc"><div class="md-restore-inner"></div></div>
+</button>
+<div id="minidisc">
+  <div class="md-panel" id="md-panel">
+    <button class="md-panel-close" id="md-panel-close" title="Minimise">↓</button>
+    <div id="md-spotify-embed" style="width:100%;height:380px;"></div>
+  </div>
+  <div class="md-player" id="md-player">
+    <div class="md-handle" id="md-handle" title="Minimise player"></div>
+    <div class="md-top-row">
+      <div class="md-disc-area" id="md-disc-area">
+        <div class="md-fan-disc md-fan-left"></div>
+        <div class="md-fan-disc md-fan-center"></div>
+        <div class="md-fan-disc md-fan-right"></div>
+        <svg class="md-fan-label" viewBox="0 0 140 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><path id="fan-arc" d="M 5,45 Q 70,2 135,45"/></defs>
+          <text fill="#c9a84c" font-family="Barlow Condensed,sans-serif" font-size="9.5" font-weight="700" letter-spacing="1.5">
+            <textPath href="#fan-arc" startOffset="50%" text-anchor="middle">SELECT A RECORD</textPath>
+          </text>
+        </svg>
+        <div class="md-disc" id="md-disc">
+          <div class="md-disc-inner"></div>
+        </div>
+      </div>
+      <div class="md-right">
+        <div class="md-brand-label">MD &middot; SONIC</div>
+        <div class="md-display-wrap">
+          <div class="md-display">
+            <span class="md-display-text" id="md-display-text"></span>
+          </div>
+        </div>
+        <div class="md-controls">
+          <button class="md-btn" id="md-prev-btn" title="Previous">&#9198;</button>
+          <button class="md-btn md-btn-play" id="md-play-btn" title="Open Spotify">&#9654;</button>
+          <button class="md-btn" id="md-next-btn" title="Next">&#9197;</button>
+        </div>
+      </div>
+    </div>
+    <div class="md-bottom-row">
+      <span class="md-artist"></span>
+      <a class="md-spotify-link" href="#" target="_blank">SPOTIFY &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER BAR ─── -->
+<div id="footer-bar">
+  <span></span>
+  <div class="footer-social"></div>
+  <div class="footer-credit">
+    <a href="https://studionine.agency" target="_blank" rel="noopener">Design by Studio Nine &#8599;</a>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/data.js?v=20"></script>
+<script src="js/auth.js"></script>
+<script src="js/shared.js?v=20"></script>
+<script src="js/home.js?v=20"></script>
+
+</body>
+</html>

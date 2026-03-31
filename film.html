@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Film Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="film-page">
+<!-- ─── LOADER ─── -->
+<div id="loader">
+  <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+</div>
+
+<!-- ─── HEADER ─── -->
+<header id="header">
+  <a href="index.html" class="fp-back hdr-left">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Home
+  </a>
+
+  <a href="index.html" class="hdr-logo">
+    <span class="logo-line"></span>
+    <span class="logo-line large"></span>
+  </a>
+
+  <div class="hdr-right">
+    <nav class="hdr-nav">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#videos">Watch</a>
+      <a href="index.html#bio">About</a>
+      <a href="index.html#press">Press</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <!-- Note: film.html nav links intentionally use index.html#section hrefs
+         so clicking them navigates back to the homepage at the right section -->
+    <div class="hdr-divider"></div>
+    <div class="hdr-controls">
+      <button class="mode-btn active" id="btn-light" title="Light mode">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="mode-btn" id="btn-dark" title="Dark mode">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn-fullscreen" id="btn-fullscreen" title="Fullscreen">⊞</button>
+    </div>
+  </div>
+</header>
+
+<!-- ─── FILM MAIN LAYOUT ─── -->
+<main id="film-main">
+
+  <!-- Left — static film image -->
+  <div class="fo-left">
+    <img id="fp-img" src="" alt="">
+  </div>
+
+  <!-- Right — scrollable film content -->
+  <div class="fo-right" id="fp-right">
+    <h2 class="fo-display-title" id="fp-title"></h2>
+    <span class="type-pill" id="fp-type-pill"></span>
+
+    <div class="fo-meta-grid">
+      <div class="fo-meta-item">
+        <span class="fo-meta-label">Film</span>
+        <span class="fo-meta-value" id="fp-meta-film"></span>
+      </div>
+      <div class="fo-meta-item">
+        <span class="fo-meta-label">Year</span>
+        <span class="fo-meta-value" id="fp-meta-year"></span>
+      </div>
+      <div class="fo-meta-item">
+        <span class="fo-meta-label">Director</span>
+        <span class="fo-meta-value" id="fp-meta-dir"></span>
+      </div>
+      <div class="fo-meta-item">
+        <span class="fo-meta-label">Studio</span>
+        <span class="fo-meta-value" id="fp-meta-studio"></span>
+      </div>
+    </div>
+
+    <p class="fo-desc" id="fp-desc"></p>
+
+    <span class="fo-tracks-title">Featured Tracks</span>
+    <ul class="fo-track-list" id="fp-tracks"></ul>
+
+    <div style="margin-top:28px;border-radius:8px;overflow:hidden;height:232px;flex-shrink:0;">
+      <iframe id="fp-spotify-iframe" src="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="width:100%;height:232px;border:none;display:block;" title="Stream the Score"></iframe>
+    </div>
+
+    <button class="fo-trailer-btn" id="fp-trailer-btn">
+      <span>&#9654;</span> Watch Trailer
+    </button>
+
+    <!-- Prev / Next navigation -->
+    <div class="fp-nav-row">
+      <a class="fp-nav-link" id="fp-prev" href="#">← Prev</a>
+      <span class="fo-counter" id="fp-counter">01 / 08</span>
+      <a class="fp-nav-link" id="fp-next" href="#">Next →</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ─── LIGHTBOX ─── -->
+<div id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+  <div id="lightbox-thumb-wrap">
+    <img id="lightbox-thumb" src="" alt="">
+    <button id="lightbox-play-btn" aria-label="Play video">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+        <polygon points="32,24 60,40 32,56" fill="white"/>
+      </svg>
+    </button>
+  </div>
+  <iframe id="lightbox-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display:none;"></iframe>
+</div>
+
+<!-- ─── LP BROWSER ─── -->
+<div id="lp-browser" aria-hidden="true">
+  <button class="lp-close-btn" id="lp-close-btn" title="Close">×</button>
+  <p class="lp-eyebrow">Crate Dig</p>
+  <h2 class="lp-heading">SELECT A SCORE</h2>
+  <div class="lp-grid" id="lp-grid"></div>
+  <p class="lp-hint">Click a record to load it into the player</p>
+</div>
+
+<!-- ─── MINIDISC ─── -->
+<button class="md-restore-tab" id="md-restore-tab" title="Open player">
+  <div class="md-restore-disc"><div class="md-restore-inner"></div></div>
+</button>
+<div id="minidisc">
+  <div class="md-panel" id="md-panel">
+    <button class="md-panel-close" id="md-panel-close" title="Minimise">↓</button>
+    <div id="md-spotify-embed" style="width:100%;height:380px;"></div>
+  </div>
+  <div class="md-player" id="md-player">
+    <div class="md-handle" id="md-handle" title="Minimise player"></div>
+    <div class="md-top-row">
+      <div class="md-disc-area" id="md-disc-area">
+        <div class="md-fan-disc md-fan-left"></div>
+        <div class="md-fan-disc md-fan-center"></div>
+        <div class="md-fan-disc md-fan-right"></div>
+        <svg class="md-fan-label" viewBox="0 0 140 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><path id="fan-arc" d="M 5,45 Q 70,2 135,45"/></defs>
+          <text fill="#c9a84c" font-family="Barlow Condensed,sans-serif" font-size="9.5" font-weight="700" letter-spacing="1.5">
+            <textPath href="#fan-arc" startOffset="50%" text-anchor="middle">SELECT A RECORD</textPath>
+          </text>
+        </svg>
+        <div class="md-disc" id="md-disc">
+          <div class="md-disc-inner"></div>
+        </div>
+      </div>
+      <div class="md-right">
+        <div class="md-brand-label">MD &middot; SONIC</div>
+        <div class="md-display-wrap">
+          <div class="md-display">
+            <span class="md-display-text" id="md-display-text"></span>
+          </div>
+        </div>
+        <div class="md-controls">
+          <button class="md-btn" id="md-prev-btn" title="Previous">&#9198;</button>
+          <button class="md-btn md-btn-play" id="md-play-btn" title="Open Spotify">&#9654;</button>
+          <button class="md-btn" id="md-next-btn" title="Next">&#9197;</button>
+        </div>
+      </div>
+    </div>
+    <div class="md-bottom-row">
+      <span class="md-artist"></span>
+      <a class="md-spotify-link" href="#" target="_blank">SPOTIFY &#8599;</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER BAR ─── -->
+<div id="footer-bar">
+  <span></span>
+  <div class="footer-social"></div>
+  <div class="footer-credit">
+    <a href="https://studionine.agency" target="_blank" rel="noopener">Design by Studio Nine &#8599;</a>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/data.js?v=20"></script>
+<script src="js/auth.js"></script>
+<script src="js/shared.js?v=20"></script>
+<script src="js/film.js?v=20"></script>
+<script>
+// Film page loader — CSS transition, no GSAP dependency
+(function() {
+  const saved = localStorage.getItem('bt-mode') || 'light';
+  document.documentElement.className = saved;
+
+  const loader = document.getElementById('loader');
+  const bar    = document.getElementById('loader-bar');
+
+  // Kick off bar fill via CSS transition
+  bar.style.transition = 'width 0.5s cubic-bezier(0.4,0,0.2,1)';
+  requestAnimationFrame(() => { bar.style.width = '100%'; });
+
+  bar.addEventListener('transitionend', () => {
+    loader.style.transition = 'opacity 0.35s ease';
+    loader.style.opacity    = '0';
+    loader.addEventListener('transitionend', () => {
+      loader.style.display = 'none';
+      initFilmPage();
+      initModeButtons();
+      initFullscreen();
+      initMiniDisc();
+      initLPBrowser();
+      initLightbox();
+    }, { once: true });
+  }, { once: true });
+})();
+</script>
+</body>
+</html>
