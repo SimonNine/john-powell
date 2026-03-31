@@ -62,6 +62,10 @@ const COMPOSER = {
     facebook:  'https://facebook.com/johnpowellmusic'
   },
 
+  // Composer photo — used as vinyl label fallback for any disc without card artwork
+  // (so the LP browser is never blank). Use a clean headshot, square or portrait crop.
+  composerPhoto: '',
+
   copyrightYear: '2025'
 };
 

@@ -390,9 +390,18 @@ function initLPBrowser() {
   if (!browser || !grid) return;
 
   // Gather entries with album URIs
-  const albums = [];
-  if (typeof FILMS    !== 'undefined') FILMS.forEach(f => { if (f.spotifyUri && f.spotifyUri.startsWith('album:')) albums.push(f); });
-  if (typeof TV_SHOWS !== 'undefined') TV_SHOWS.forEach(s => { if (s.spotifyUri && s.spotifyUri.startsWith('album:')) albums.push(s); });
+  const allAlbums = [];
+  if (typeof FILMS    !== 'undefined') FILMS.forEach(f => { if (f.spotifyUri && f.spotifyUri.startsWith('album:')) allAlbums.push(f); });
+  if (typeof TV_SHOWS !== 'undefined') TV_SHOWS.forEach(s => { if (s.spotifyUri && s.spotifyUri.startsWith('album:')) allAlbums.push(s); });
+
+  // 8-disk rule: prioritise entries with card artwork; cap at 8
+  const hasArt = e => e.cards && e.cards[0] && e.cards[0].img;
+  const withArt    = allAlbums.filter(hasArt);
+  const withoutArt = allAlbums.filter(e => !hasArt(e));
+  const albums = [...withArt, ...withoutArt].slice(0, 8);
+
+  // Fallback image for no-artwork discs: composer photo (never blank)
+  const composerPhoto = (typeof COMPOSER !== 'undefined' && COMPOSER.composerPhoto) ? COMPOSER.composerPhoto : '';
 
   // Expose album list globally for prev/next cycling
   albumList = albums;
@@ -401,10 +410,10 @@ function initLPBrowser() {
   albums.forEach((entry, idx) => {
     const record = document.createElement('div');
     record.className = 'lp-record';
-    const imgUrl = entry.cards && entry.cards[0] ? entry.cards[0].img : '';
+    const imgUrl = hasArt(entry) ? entry.cards[0].img : composerPhoto;
     record.innerHTML = `
       <div class="lp-vinyl">
-        <div class="lp-label" style="background-image:url('${imgUrl}')">
+        <div class="lp-label"${imgUrl ? ` style="background-image:url('${imgUrl}')"` : ''}>
           <div class="lp-label-hole"></div>
         </div>
       </div>
