@@ -323,11 +323,11 @@ const FILMS = [
     studio: 'Blue Sky Studios / 20th Century Fox',
     accolades: [],
     cards: [
-      { img: 'https://image.tmdb.org/t/p/w780/eqMRVgvd2QWXwUJP8yWscONHoJf.jpg', pos: 'center center' },
-      { img: 'https://image.tmdb.org/t/p/w780/eqMRVgvd2QWXwUJP8yWscONHoJf.jpg', pos: 'center 40%' },
-      { img: 'https://image.tmdb.org/t/p/w780/eqMRVgvd2QWXwUJP8yWscONHoJf.jpg', pos: 'center 30%' }
+      { img: 'https://image.tmdb.org/t/p/w780/sTOhZruocNubL0HxjvdouwCEL9I.jpg', pos: 'center center' },
+      { img: 'https://image.tmdb.org/t/p/w780/tirtMoebpAPrkHovuB4dnA4Y8do.jpg', pos: 'center 40%' },
+      { img: 'https://image.tmdb.org/t/p/w780/xqzpw3MkSss0F8vwRPBZiJLtZe7.jpg', pos: 'center 30%' }
     ],
-    overlayImg: 'https://image.tmdb.org/t/p/w1280/eqMRVgvd2QWXwUJP8yWscONHoJf.jpg',
+    overlayImg: 'https://image.tmdb.org/t/p/w1280/sTOhZruocNubL0HxjvdouwCEL9I.jpg',
     trailerVideoId: 'MuStb9a1b64',
     spotifyUri: 'album:5OFKXwzil4yM3T5tfo2wo4',
     tracks: [],
