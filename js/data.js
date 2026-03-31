@@ -8,8 +8,14 @@ const COMPOSER = {
   nameDisplay:  'John Powell',
   role:         'Film Composer \u00b7 Conductor \u00b7 BAFTA Winner',
 
+  // Per-composer storage key prefix — prevents localStorage bleed between composer sites
+  storagePrefix: 'jp',
+
+  // Splash / hero card background video (should be 16:9, no letterboxing)
+  splashVideoId: '1huZhKwhIQc',
+
   // Bio section
-  bioVideoId:   'YgyGbemBISY',
+  bioVideoId:   '1huZhKwhIQc',
   bioHeading:   ['JOHN', 'POWELL'],
   bioParas: [
     "John Powell is one of Hollywood\u2019s most celebrated film composers, renowned for blending sweeping orchestral landscapes with intimate emotional storytelling. His music for the How to Train Your Dragon trilogy has become some of the most beloved in animated cinema \u2014 earning an Academy Award nomination and defining a generation of adventurous film music.",
@@ -77,7 +83,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/59vDC1BuEQvti24OMr0ZvtAK6R1.jpg',
     trailerVideoId: '1huZhKwhIQc',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:4eWwSXYZZhc6zfTHPNSoEw',
     tracks: ['This Is Berk', 'Dragon Training', 'The Dragon Book', 'Test Drive', 'Romantic Flight', 'Dragon Battle', 'Forbidden Friendship', 'Coming Back Around'],
     description: "The score that made Powell a household name. Written for a full 76-piece orchestra plus additional layers, the music for How to Train Your Dragon is a masterpiece of thematic unity \u2014 every character and relationship expressed through its own motif. The main theme, \u201cThis Is Berk,\u201d remains one of the most recognisable pieces of modern film music."
   },
@@ -97,7 +103,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/8AAuJtCzaibYkbE0QVHc8EBsELB.jpg',
     trailerVideoId: 'hMJnFMKmSPA',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:1VYM3uIZXGJGa7T8jGHG5z',
     tracks: ['Dragon Racing', 'Stoick Saves Hiccup', 'Hiccup the Chief / Drago\u2019s Coming', 'Flying with Mother', 'For the Dancing and the Dreaming'],
     description: "The emotional stakes grew higher in the sequel, and Powell\u2019s music rose to meet them. Expanding the thematic vocabulary established in the first film, HTTYD 2 introduced new leitmotifs for new characters while deepening existing ones \u2014 most powerfully in the devastating score for Stoick\u2019s sacrifice."
   },
@@ -117,7 +123,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/h3KN24PrOheHVYs9ypuOIdFBEpX.jpg',
     trailerVideoId: 'Hfz6VAXXR_o',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:2lbH7LYqdX5TzwZSp2pBzq',
     tracks: ['Together from Afar', 'Armada Assault', 'Toothless Lost', 'Chief and Dragon', 'Once There Were Dragons'],
     description: "The trilogy\u2019s conclusion called for music of farewell. Powell\u2019s score for The Hidden World is the most intimate of the three \u2014 trading some of the first film\u2019s bombast for bittersweet reflection. The final cue, \u201cOnce There Were Dragons,\u201d may be the most moving piece he has ever written."
   },
@@ -137,7 +143,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/uVlUu174iiKhsUGqnOSy46eIIMU.jpg',
     trailerVideoId: '6COmYeLsz4c',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:3I9Slmp6yPB9Fo8irSzgcM',
     tracks: ['No One Mourns the Wicked', 'The Wizard and I', 'What Is This Feeling?', 'Dancing Through Life', 'Popular', 'I\u2019m Not That Girl', 'One Short Day', 'Defying Gravity'],
     description: "One of the most anticipated film adaptations in decades, Wicked reunited Powell with director Jon M. Chu for an orchestral score to accompany Stephen Schwartz\u2019s legendary songs. Powell\u2019s original underscore weaves seamlessly between the iconic numbers, adding dramatic depth and emotional texture to Oz\u2019s most ambitious big-screen journey."
   },
@@ -157,7 +163,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/7LZ0K4FsALrt7OeNIGOVLNuKQRU.jpg',
     trailerVideoId: 'jPEYpryMp2s',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:1J76rH41hYtvoV4AXRzsoL',
     tracks: ['The Good Guy', 'Corellia Chase', 'Marauders Arrive', 'Into the Maw', 'Reminiscence Therapy', 'Flying with Chewie', 'The Train Heist', 'Lando\u2019s Closet'],
     description: "Taking over from the original composers after a director change mid-production, Powell delivered a fully-formed Star Wars score that felt both familiar and distinctly his own. Working from John Williams\u2019 original Han Solo theme, he built an adventurous, swaggering score that perfectly captured the spirit of the galaxy\u2019s favourite smuggler."
   },
@@ -197,7 +203,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/shSOQ6mdS4fqOZQmIF0TJHvrnXS.jpg',
     trailerVideoId: 'PGKK5wACwrU',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:6jj4QJG5qQFmQT9FnuSs4h',
     tracks: ['Bourne\u2019s Identity', 'Marie\u2019s Theme', 'The Bourne Identity', 'Bourne Again', 'Paris / Meeting Treadstone'],
     description: "The score that launched a trilogy and redefined the action thriller sound. Powell\u2019s approach to The Bourne Identity was radical for its time: eschewing traditional orchestral heroics in favour of sparse, electronic-inflected textures that conveyed Bourne\u2019s fractured identity and constant unease. The music never quite lets the audience \u2014 or the character \u2014 relax."
   },
@@ -217,7 +223,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/fE7RqvVHbGHjBC9NjIjlLh2t4zK.jpg',
     trailerVideoId: 'l_uBMCz3gK8',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:1Wl2ksx5Tjm1OqAthYmPVc',
     tracks: ['Goa', 'The Bourne Supremacy', 'I Can\u2019t Feel Anything', 'Bourne to Run', 'Bim Bam Smash'],
     description: "Working with new director Paul Greengrass, Powell evolved the Bourne sound to match the sequel\u2019s more abrasive, documentary-style filmmaking. The Supremacy score is harder and more relentless than the original, with percussion-forward action cues that mirror the film\u2019s iconic hand-held aesthetic."
   },
@@ -319,7 +325,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/eqMRVgvd2QWXwUJP8yWscONHoJf.jpg',
     trailerVideoId: 'MuStb9a1b64',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:5OFKXwzil4yM3T5tfo2wo4',
     tracks: [],
     description: "An affectionate, warm score for this animated tale of a gentle bull who refuses to fight. Powell\u2019s music for Ferdinand is some of his most lyrical \u2014 built around Spanish-inflected melodies and a chamber-sized ensemble that suits the film\u2019s intimate storytelling."
   },
@@ -439,7 +445,7 @@ const FILMS = [
     ],
     overlayImg: 'https://image.tmdb.org/t/p/w1280/6gCOTMInQWKxTqAMXKEr0Q1nSVe.jpg',
     trailerVideoId: 'RKMX9LCi3OE',
-    spotifyUri: 'artist:3EAHF3jdnHHdko5DBrhRUP',
+    spotifyUri: 'album:4IB8FSDJdf8zDmzTSGnpgk',
     tracks: [],
     description: "A vibrant, samba-soaked score for Blue Sky\u2019s colourful animated adventure. Powell immersed himself in Brazilian musical traditions to create authentic underscore that matches the film\u2019s infectious energy. The music feels alive with the spirit of Rio de Janeiro."
   },

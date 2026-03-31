@@ -19,8 +19,28 @@ gsap.registerPlugin(ScrollTrigger);
   const role     = document.getElementById('loader-role');
   const enterBtn = document.getElementById('loader-enter-btn');
 
+  // Pre-fill identity from COMPOSER config immediately (before any animation or
+  // page-show check) so the splash shows the correct composer name and video
+  // without any flash of the previous composer's content.
+  if (typeof COMPOSER !== 'undefined') {
+    if (ll1) ll1.textContent = COMPOSER.nameFirst;
+    if (ll2) ll2.textContent = COMPOSER.nameLast;
+
+    const heroTitle = document.getElementById('hero-title-text');
+    if (heroTitle) heroTitle.textContent = COMPOSER.nameFirst + ' ' + COMPOSER.nameLast;
+
+    const vid = COMPOSER.splashVideoId || COMPOSER.bioVideoId;
+    if (vid) {
+      const vidSrc = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=0&showinfo=0&rel=0&modestbranding=1&start=10`;
+      const splashIframe = document.querySelector('.loader-video-bg iframe');
+      if (splashIframe) splashIframe.src = vidSrc;
+      const heroCardIframe = document.querySelector('#hc2-video iframe');
+      if (heroCardIframe) heroCardIframe.src = vidSrc;
+    }
+  }
+
   // Skip splash on returning visits (same browser session)
-  if (sessionStorage.getItem('bt-visited')) {
+  if (sessionStorage.getItem(storeKey('visited'))) {
     loader.style.display = 'none';
     initPage();
     return;
@@ -46,7 +66,7 @@ gsap.registerPlugin(ScrollTrigger);
 
   // Enter button click — dismiss splash and mark as visited
   enterBtn.addEventListener('click', () => {
-    sessionStorage.setItem('bt-visited', '1');
+    sessionStorage.setItem(storeKey('visited'), '1');
     gsap.to(loader, {
       opacity: 0, duration: 0.55,
       onComplete: () => {
@@ -103,6 +123,25 @@ function initComposerHome() {
   }
   const tagline = document.querySelector('.contact-tagline');
   if (tagline) tagline.textContent = c.contactTagline;
+
+  // Shelf LP artwork — use first 4 films' card images
+  if (typeof FILMS !== 'undefined') {
+    [0, 1, 2, 3].forEach(i => {
+      const el = document.getElementById('shelf-lp-' + i);
+      if (el && FILMS[i] && FILMS[i].cards && FILMS[i].cards[0]) {
+        el.style.backgroundImage = "url('" + FILMS[i].cards[0].img + "')";
+      }
+    });
+  }
+
+  // Hero card bg video — also set here for robustness on returning visits
+  const heroCardIframe = document.querySelector('#hc2-video iframe');
+  if (heroCardIframe && c.splashVideoId) {
+    if (!heroCardIframe.src) {
+      const vid = c.splashVideoId;
+      heroCardIframe.src = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=0&showinfo=0&rel=0&modestbranding=1&start=10`;
+    }
+  }
 }
 
 // ─── INIT PAGE ───

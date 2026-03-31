@@ -47,6 +47,16 @@ function initComposer() {
   }
 }
 
+// ─── PER-COMPOSER STORAGE KEY ───
+// Namespaces localStorage/sessionStorage keys to this composer so multiple
+// composer sites don't bleed into each other's saved state.
+// COMPOSER.storagePrefix should be set in data.js (e.g. 'bt', 'jp').
+function storeKey(suffix) {
+  const prefix = (typeof COMPOSER !== 'undefined' && COMPOSER.storagePrefix)
+    ? COMPOSER.storagePrefix : 'bt';
+  return prefix + '-' + suffix;
+}
+
 // ─── SHARED STATE ───
 let spotifyController = null;
 let openLPBrowser  = () => {};
@@ -71,7 +81,7 @@ window.onSpotifyIframeApiReady = function(IFrameAPI) {
     // without it the call can silently fail on first page load.
     setTimeout(function() {
       try {
-        const saved = JSON.parse(localStorage.getItem('bt-album') || 'null');
+        const saved = JSON.parse(localStorage.getItem(storeKey('album')) || 'null');
         if (saved && saved.uri) spotifyController.loadUri('spotify:' + saved.uri);
       } catch(e) {}
     }, 800);
@@ -289,7 +299,7 @@ function initMiniDisc() {
       try { spotifyController.loadUri('spotify:' + uri); } catch(e) {}
     }
     // Persist so the same album is ready on any page the user navigates to
-    try { localStorage.setItem('bt-album', JSON.stringify({ uri, title })); } catch(e) {}
+    try { localStorage.setItem(storeKey('album'), JSON.stringify({ uri, title })); } catch(e) {}
     const displayText = document.getElementById('md-display-text');
     if (displayText) {
       displayText.textContent = title.toUpperCase() + ' \u25c6 ' + (typeof COMPOSER !== 'undefined' ? COMPOSER.nameFirst + ' ' + COMPOSER.nameLast : 'COMPOSER') + ' \u25c6\u00a0\u00a0';
@@ -413,14 +423,15 @@ function initLPBrowser() {
 
   // Restore previously-selected album (display text, idx, LP selection marker)
   try {
-    const saved = JSON.parse(localStorage.getItem('bt-album') || 'null');
+    const saved = JSON.parse(localStorage.getItem(storeKey('album')) || 'null');
     if (saved && saved.uri) {
       const idx = albums.findIndex(a => a.spotifyUri === saved.uri);
       if (idx >= 0) {
         currentAlbumIdx = idx;
         const displayText = document.getElementById('md-display-text');
         if (displayText) {
-          displayText.textContent = saved.title.toUpperCase() + ' \u25c6 BRIAN TYLER \u25c6\u00a0\u00a0';
+          const nameUpper = typeof COMPOSER !== 'undefined' ? COMPOSER.nameFirst + ' ' + COMPOSER.nameLast : 'COMPOSER';
+          displayText.textContent = saved.title.toUpperCase() + ' \u25c6 ' + nameUpper + ' \u25c6\u00a0\u00a0';
         }
         document.querySelectorAll('.lp-record').forEach((r, i) => {
           r.classList.toggle('playing', i === idx);
