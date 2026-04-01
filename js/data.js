@@ -66,6 +66,9 @@ const COMPOSER = {
   // (so the LP browser is never blank). Use a clean headshot, square or portrait crop.
   composerPhoto: '',
 
+  // Birthday easter egg — MM-DD format. Set '' to disable.
+  birthday: '09-18', // 18 September
+
   copyrightYear: '2025'
 };
 

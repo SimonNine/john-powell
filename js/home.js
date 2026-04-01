@@ -172,6 +172,8 @@ function initPage() {
   initCta();
   initContactOrb();
   initCardCursor();
+  initBirthdayMode();
+  initCinemaMode();
 }
 
 // ─── LENIS SMOOTH SCROLL ───
@@ -750,3 +752,199 @@ window.addEventListener('pageshow', function(e) {
   // 4. Restart clock interval
   initClock();
 });
+// ─── CINEMA MODE ─── (idle easter egg)
+function initCinemaMode() {
+  const IDLE_MS = 10 * 1000; // ← swap to 90 * 1000 for production
+  const c   = typeof COMPOSER !== 'undefined' ? COMPOSER : {};
+  const vid = c.splashVideoId || c.bioVideoId || '';
+  if (!vid) return;
+
+  // Build overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'cinema-overlay';
+  overlay.innerHTML = `
+    <div class="cinema-valance"></div>
+    <div class="cinema-curtain cinema-curtain-left"></div>
+    <div class="cinema-curtain cinema-curtain-right"></div>
+    <div class="cinema-stage">
+      <div class="cinema-screen-wrap">
+        <div class="cinema-screen-frame">
+          <iframe id="cinema-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <div class="cinema-screen-rod"></div>
+        </div>
+      </div>
+      <div class="cinema-meta">
+        <p class="cinema-headline">Intermission &nbsp;&middot;&nbsp; The music plays on</p>
+        <p class="cinema-cta-text">Move your cursor &nbsp;&middot;&nbsp; tap anywhere to return</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const iframe = document.getElementById('cinema-iframe');
+
+  let idleTimer, active = false;
+
+  function enterCinema() {
+    if (active) return;
+    active = true;
+    // Preload video before revealing
+    iframe.src = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=0&showinfo=0&rel=0&modestbranding=1&start=12`;
+    overlay.classList.add('cinema-visible');
+    setTimeout(() => overlay.classList.add('curtains-in'), 150);
+    setTimeout(() => overlay.classList.add('screen-down'), 1300);
+    setTimeout(() => overlay.classList.add('meta-in'), 2600);
+  }
+
+  function exitCinema() {
+    if (!active) return;
+    active = false;
+    overlay.style.transition = 'opacity 0.5s ease';
+    overlay.style.opacity    = '0';
+    overlay.style.pointerEvents = 'none';
+    setTimeout(() => {
+      overlay.removeAttribute('style');
+      overlay.classList.remove('cinema-visible', 'curtains-in', 'screen-down', 'meta-in');
+      iframe.src = '';
+      resetTimer();
+    }, 520);
+  }
+
+  function resetTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(enterCinema, IDLE_MS);
+  }
+
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
+    document.addEventListener(evt, () => active ? exitCinema() : resetTimer(), { passive: true })
+  );
+
+  resetTimer();
+}
+
+// ─── BIRTHDAY MODE ─── (annual easter egg)
+function initBirthdayMode() {
+  const c = typeof COMPOSER !== 'undefined' ? COMPOSER : {};
+  if (!c.birthday) return;
+
+  const today = new Date();
+  const mm    = String(today.getMonth() + 1).padStart(2, '0');
+  const dd    = String(today.getDate()).padStart(2, '0');
+  if (c.birthday !== `${mm}-${dd}`) return;
+
+  const seenKey = typeof storeKey === 'function' ? storeKey('bday-seen') : 'bday-seen';
+  if (sessionStorage.getItem(seenKey)) return;
+  sessionStorage.setItem(seenKey, '1');
+
+  const name    = c.nameDisplay || `${c.nameFirst} ${c.nameLast}`;
+  const social  = c.social || {};
+  const links   = [];
+  if (social.twitter)   links.push(`<a href="${social.twitter}"   target="_blank" rel="noopener">Send a message on X &nbsp;↗</a>`);
+  if (social.instagram) links.push(`<a href="${social.instagram}" target="_blank" rel="noopener">Instagram &nbsp;↗</a>`);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'birthday-overlay';
+  overlay.innerHTML = `
+    <canvas id="birthday-fireworks"></canvas>
+    <div class="bday-content">
+      <span class="bday-icon">&#127881;</span>
+      <p class="bday-eyebrow">A special occasion</p>
+      <h1 class="bday-name">Happy Birthday</h1>
+      <p class="bday-subtitle">${name}</p>
+      <div class="bday-divider"></div>
+      <p class="bday-message">Decades of extraordinary music. Scores that have defined some of cinema's greatest moments &mdash; and made countless others feel bigger than they really are.<br><br>If the music has ever moved you, today's a great day to say so.</p>
+      ${links.length ? `<div class="bday-social">${links.join('')}</div>` : ''}
+      <button class="bday-close">Continue to site &nbsp;&rsaquo;</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Fade in after paint
+  requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('bday-visible')));
+
+  // Launch fireworks
+  launchBirthdayFireworks(overlay.querySelector('#birthday-fireworks'));
+
+  // Close button
+  overlay.querySelector('.bday-close').addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.6s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 650);
+  });
+}
+
+function launchBirthdayFireworks(canvas) {
+  if (!canvas) return;
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const ctx = canvas.getContext('2d');
+  // Gold/warm colour palette matching the site
+  const PALETTE = [
+    [200, 169, 110], [220, 185, 100], [255, 215, 80],
+    [230, 200, 140], [255, 240, 160], [180, 140,  80]
+  ];
+  const particles = [];
+
+  function burst(x, y) {
+    const n = 55 + Math.floor(Math.random() * 35);
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.4;
+      const speed = 1.8 + Math.random() * 5.5;
+      const col   = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      particles.push({
+        x, y,
+        vx:    Math.cos(angle) * speed,
+        vy:    Math.sin(angle) * speed,
+        alpha: 1,
+        decay: 0.010 + Math.random() * 0.012,
+        size:  1.8 + Math.random() * 2.8,
+        col,
+        trail: []
+      });
+    }
+  }
+
+  // Schedule 10 auto-bursts
+  let fired = 0;
+  function scheduleBurst() {
+    if (fired >= 10) return;
+    burst(
+      canvas.width  * (0.15 + Math.random() * 0.70),
+      canvas.height * (0.08 + Math.random() * 0.52)
+    );
+    fired++;
+    setTimeout(scheduleBurst, 350 + Math.random() * 650);
+  }
+  scheduleBurst();
+
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.trail.push([p.x, p.y]);
+      if (p.trail.length > 6) p.trail.shift();
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += 0.09; // gravity
+      p.vx *= 0.98;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+      // Trail
+      p.trail.forEach(([tx, ty], ti) => {
+        ctx.beginPath();
+        ctx.arc(tx, ty, p.size * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.col[0]},${p.col[1]},${p.col[2]},${p.alpha * (ti / p.trail.length) * 0.45})`;
+        ctx.fill();
+      });
+      // Head
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.col[0]},${p.col[1]},${p.col[2]},${p.alpha})`;
+      ctx.fill();
+    }
+    if (particles.length > 0 || fired < 10) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
