@@ -1854,23 +1854,23 @@ html.dark .type-pill-tv   { color: rgba(100,150,210,0.5); }
   .auth-btn { width: 260px; }
 }
 
-
 /* ═══════════════════════════════════════════════════════════════════════════
-   CINEMA MODE — Idle takeover easter egg
+   CINEMA MODE — Idle easter egg (v2: blur backdrop, canisters, chairs)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 #cinema-overlay {
   position: fixed;
   inset: 0;
   z-index: 9800;
-  background: #000;
+  background: rgba(0,0,0,0.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 2s ease;
+  transition: opacity 1.8s ease;
   overflow: hidden;
 }
 #cinema-overlay.cinema-visible {
@@ -1878,149 +1878,292 @@ html.dark .type-pill-tv   { color: rgba(100,150,210,0.5); }
   pointer-events: all;
 }
 
-/* ── Valance: horizontal drape across top ── */
-.cinema-valance {
+/* ── EXIT sign ── */
+.cinema-exit {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 90px;
-  z-index: 3;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.40) 0px, rgba(255,255,255,0.05) 5px,
-      rgba(0,0,0,0.20) 10px, rgba(255,255,255,0.03) 16px,
-      rgba(0,0,0,0.35) 22px, rgba(255,255,255,0.04) 28px,
-      rgba(0,0,0,0.15) 34px, rgba(255,255,255,0.02) 40px
-    ),
-    linear-gradient(180deg, #9e1a1a 0%, #7c0d0d 55%, transparent 100%);
-  transform: scaleY(0);
-  transform-origin: top center;
-  transition: transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s;
+  top: 22px;
+  right: 26px;
+  z-index: 20;
+  background: #1a6b2a;
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 7px 16px 7px 12px;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 10px rgba(26,107,42,0.8), 0 0 24px rgba(26,107,42,0.35), 0 0 50px rgba(26,107,42,0.15);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.6s ease 2.2s, transform 0.6s ease 2.2s, background 0.15s, box-shadow 0.15s;
+  user-select: none;
 }
-#cinema-overlay.curtains-in .cinema-valance { transform: scaleY(1); }
+.cinema-exit::before {
+  content: '\25C4';
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+#cinema-overlay.cinema-visible .cinema-exit { opacity: 1; transform: none; }
+.cinema-exit:hover {
+  background: #22892f;
+  box-shadow: 0 0 14px rgba(34,137,47,0.9), 0 0 30px rgba(34,137,47,0.5);
+}
 
-/* ── Side curtains ── */
-.cinema-curtain {
+/* ── Main layout: reel sidebars + center stage ── */
+.cinema-layout {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  width: 100%;
+  padding: 56px 24px 0;
+  margin-bottom: 34vh;
+}
+
+/* ── Reel sidebar columns ── */
+.cinema-reel-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity 0.9s ease;
+}
+.cinema-reel-col.reel-left  { transition-delay: 1.1s; }
+.cinema-reel-col.reel-right { transition-delay: 1.3s; }
+#cinema-overlay.meta-in .cinema-reel-col { opacity: 1; }
+
+.cinema-reel-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: rgba(200,169,110,0.45);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+/* ── Film canister wrapper ── */
+.cinema-canister-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.cinema-canister-wrap:hover .cinema-canister {
+  transform: scale(1.1) rotate(6deg);
+  box-shadow: 0 0 0 1px #444, 0 6px 20px rgba(0,0,0,0.8), 0 0 14px rgba(200,169,110,0.28);
+}
+.cinema-canister-wrap:hover .cinema-canister-title { color: rgba(200,169,110,0.85); }
+.cinema-canister-wrap.active .cinema-canister {
+  border-color: var(--gold, #c8a96e);
+  box-shadow: 0 0 0 2px rgba(200,169,110,0.4), 0 0 20px rgba(200,169,110,0.45), 0 6px 18px rgba(0,0,0,0.7);
+}
+.cinema-canister-wrap.active .cinema-canister-title { color: rgba(200,169,110,0.9); }
+
+/* ── Film canister (reel face) ── */
+.cinema-canister {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border: 3px solid #2c2c2c;
+  box-shadow: 0 0 0 1px #101010, 0 5px 16px rgba(0,0,0,0.75);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  flex-shrink: 0;
+}
+.cinema-canister::before {
+  content: '';
   position: absolute;
-  top: 0;
-  height: 100%;
-  width: 22%;
-  z-index: 2;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,0,0,0.42) 0px, rgba(255,255,255,0.06) 5px,
-      rgba(0,0,0,0.22) 11px, rgba(255,255,255,0.04) 17px,
-      rgba(0,0,0,0.38) 23px, rgba(255,255,255,0.05) 29px,
-      rgba(0,0,0,0.18) 35px, rgba(255,255,255,0.02) 41px,
-      rgba(0,0,0,0.32) 47px, rgba(255,255,255,0.03) 52px
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0.88) 10%, transparent 26%),
+    conic-gradient(
+      rgba(0,0,0,0.52) 0deg,   transparent 24deg,
+      rgba(0,0,0,0.52) 60deg,  transparent 84deg,
+      rgba(0,0,0,0.52) 120deg, transparent 144deg,
+      rgba(0,0,0,0.52) 180deg, transparent 204deg,
+      rgba(0,0,0,0.52) 240deg, transparent 264deg,
+      rgba(0,0,0,0.52) 300deg, transparent 324deg
     ),
-    linear-gradient(180deg, #a01c1c 0%, #891212 25%, #7a0c0c 55%, #631010 80%, #4a0808 100%);
-  transition: transform 1.1s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s;
+    radial-gradient(circle at center, transparent 52%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
 }
-.cinema-curtain-left {
-  left: 0;
-  transform: translateX(-100%);
-  box-shadow: inset -10px 0 30px rgba(0,0,0,0.55), 6px 0 24px rgba(0,0,0,0.7);
+.cinema-canister::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a2a2a 40%, #0e0e0e 100%);
+  border: 1.5px solid #383838;
+  box-shadow: 0 0 5px rgba(0,0,0,0.9);
+  pointer-events: none;
 }
-.cinema-curtain-right {
-  right: 0;
-  transform: translateX(100%);
-  box-shadow: inset 10px 0 30px rgba(0,0,0,0.55), -6px 0 24px rgba(0,0,0,0.7);
+.cinema-canister-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+  text-align: center;
+  max-width: 88px;
+  line-height: 1.35;
+  margin: 0;
+  transition: color 0.2s;
 }
-#cinema-overlay.curtains-in .cinema-curtain-left  { transform: translateX(0); }
-#cinema-overlay.curtains-in .cinema-curtain-right { transform: translateX(0); }
 
-/* ── Stage: centered column ── */
+/* ── Center stage ── */
 .cinema-stage {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  width: 56%;
-  max-width: 860px;
+  gap: 18px;
+  flex-shrink: 0;
+  width: min(50vw, 700px);
 }
+
+/* ── Proscenium arch header ── */
+.cinema-proscenium {
+  width: 105%;
+  height: 14px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%, rgba(200,169,110,0.2) 10%, rgba(200,169,110,0.5) 38%,
+    rgba(200,169,110,0.65) 50%, rgba(200,169,110,0.5) 62%,
+    rgba(200,169,110,0.2) 90%, transparent 100%
+  );
+  border-bottom: 1px solid rgba(200,169,110,0.2);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.9s ease 0.1s;
+}
+#cinema-overlay.screen-down .cinema-proscenium { clip-path: inset(0); }
 
 /* ── Screen roll-down ── */
 .cinema-screen-wrap {
   width: 100%;
   aspect-ratio: 16 / 9;
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1.3s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: clip-path 1.3s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s;
   position: relative;
 }
 #cinema-overlay.screen-down .cinema-screen-wrap { clip-path: inset(0); }
 
-.cinema-screen-frame {
+.cinema-screen-outer {
   width: 100%;
   height: 100%;
-  border: 10px solid #f2ece0;
-  box-shadow:
-    0 0 0 2px #b8a870,
-    0 0 80px rgba(0,0,0,0.9),
-    inset 0 0 50px rgba(0,0,0,0.6);
-  background: #000;
+  padding: 10px;
+  background: linear-gradient(145deg, #c8aa50 0%, #f0d878 22%, #d4b858 44%, #f8e898 56%, #c0a040 78%, #e8c870 100%);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.7), 0 0 55px rgba(0,0,0,0.95), 0 0 100px rgba(0,0,0,0.6);
+  box-sizing: border-box;
   position: relative;
 }
-.cinema-screen-frame iframe {
+.cinema-screen-inner {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+}
+.cinema-screen-inner iframe {
   width: 100%;
   height: 100%;
   border: none;
   display: block;
 }
-/* Projector screen bottom rod */
+.cinema-screen-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.07;
+  pointer-events: none;
+  animation: filmGrain 0.35s steps(1) infinite;
+}
+@keyframes filmGrain {
+  0%   { background-position:   0px   0px; }
+  25%  { background-position: -38px -18px; }
+  50%  { background-position:  18px  38px; }
+  75%  { background-position: -18px  12px; }
+  100% { background-position:  12px -28px; }
+}
 .cinema-screen-rod {
   position: absolute;
   bottom: -18px;
-  left: -18px;
-  right: -18px;
-  height: 11px;
-  background: linear-gradient(180deg, #d8c88a 0%, #a89448 45%, #c4a85e 100%);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+  left: -14px;
+  right: -14px;
+  height: 10px;
+  background: linear-gradient(180deg, #d8c88a 0%, #a89448 50%, #c4a85e 100%);
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.75);
 }
 
-/* ── Text below screen ── */
+/* ── Meta text below screen ── */
 .cinema-meta {
   text-align: center;
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease 1.6s, transform 0.8s ease 1.6s;
 }
 #cinema-overlay.meta-in .cinema-meta { opacity: 1; transform: none; }
 
 .cinema-headline {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(0.75rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.58rem, 1vw, 0.78rem);
   font-weight: 300;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: rgba(242,236,224,0.65);
-  margin: 0 0 10px;
-}
-.cinema-cta-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(0.55rem, 0.85vw, 0.68rem);
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(200,169,110,0.42);
+  color: rgba(242,236,224,0.38);
   margin: 0;
 }
 
-/* ── Mobile tweaks ── */
-@media (max-width: 768px) {
-  .cinema-stage { width: 76%; }
-  .cinema-curtain { width: 12%; }
+/* ── Cinema chairs slide up from bottom ── */
+.cinema-chairs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 36vh;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transform: translateY(100%);
+  transition: transform 1.8s cubic-bezier(0.22,1,0.36,1) 0.2s;
+  z-index: 5;
+  pointer-events: none;
 }
-@media (max-width: 480px) {
-  .cinema-stage { width: 88%; }
-  .cinema-curtain { display: none; }
-  .cinema-valance { display: none; }
-}
+#cinema-overlay.chairs-up .cinema-chairs { transform: translateY(0); }
 
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .cinema-layout { gap: 20px; }
+  .cinema-stage  { width: min(56vw, 560px); }
+  .cinema-canister { width: 68px; height: 68px; }
+}
+@media (max-width: 640px) {
+  .cinema-reel-col { display: none; }
+  .cinema-stage    { width: 88vw; }
+  .cinema-layout   { margin-bottom: 22vh; padding-top: 48px; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    BIRTHDAY MODE — Annual easter egg

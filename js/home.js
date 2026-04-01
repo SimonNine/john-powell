@@ -752,47 +752,75 @@ window.addEventListener('pageshow', function(e) {
   // 4. Restart clock interval
   initClock();
 });
+
 // ─── CINEMA MODE ─── (idle easter egg)
 function initCinemaMode() {
-  const IDLE_MS = 10 * 1000; // ← swap to 90 * 1000 for production
+  const IDLE_MS = 10 * 1000; // <- change to 90 * 1000 for production
   const c   = typeof COMPOSER !== 'undefined' ? COMPOSER : {};
   const vid = c.splashVideoId || c.bioVideoId || '';
   if (!vid) return;
 
-  // Build overlay
-  const overlay = document.createElement('div');
-  overlay.id = 'cinema-overlay';
-  overlay.innerHTML = `
-    <div class="cinema-valance"></div>
-    <div class="cinema-curtain cinema-curtain-left"></div>
-    <div class="cinema-curtain cinema-curtain-right"></div>
-    <div class="cinema-stage">
-      <div class="cinema-screen-wrap">
-        <div class="cinema-screen-frame">
-          <iframe id="cinema-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          <div class="cinema-screen-rod"></div>
-        </div>
-      </div>
-      <div class="cinema-meta">
-        <p class="cinema-headline">Intermission &nbsp;&middot;&nbsp; The music plays on</p>
-        <p class="cinema-cta-text">Move your cursor &nbsp;&middot;&nbsp; tap anywhere to return</p>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-  const iframe = document.getElementById('cinema-iframe');
+  const allVids   = (typeof VIDEOS !== 'undefined' && VIDEOS.length) ? VIDEOS : [];
+  const leftVids  = allVids.slice(0, 3);
+  const rightVids = allVids.slice(3, 6);
 
-  let idleTimer, active = false;
+  function canisterHTML(v) {
+    var thumb = 'https://img.youtube.com/vi/' + v.id + '/mqdefault.jpg';
+    return '<div class="cinema-canister-wrap" data-vid="' + v.id + '">' +
+      '<div class="cinema-canister" style="background-image:url(\'' + thumb + '\')"></div>' +
+      '<p class="cinema-canister-title">' + v.title + '</p>' +
+      '</div>';
+  }
+
+  var overlay = document.createElement('div');
+  overlay.id = 'cinema-overlay';
+  overlay.innerHTML =
+    '<button class="cinema-exit" id="cinema-exit-btn" aria-label="Exit cinema mode">Exit</button>' +
+    '<div class="cinema-layout">' +
+      '<div class="cinema-reel-col reel-left">' +
+        '<p class="cinema-reel-label">Select a film</p>' +
+        leftVids.map(canisterHTML).join('') +
+      '</div>' +
+      '<div class="cinema-stage">' +
+        '<div class="cinema-proscenium"></div>' +
+        '<div class="cinema-screen-wrap">' +
+          '<div class="cinema-screen-outer">' +
+            '<div class="cinema-screen-inner">' +
+              '<iframe id="cinema-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>' +
+            '</div>' +
+            '<div class="cinema-screen-rod"></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cinema-meta"><p class="cinema-headline">Click the exit sign to leave</p></div>' +
+      '</div>' +
+      '<div class="cinema-reel-col reel-right">' +
+        '<p class="cinema-reel-label">Select a film</p>' +
+        rightVids.map(canisterHTML).join('') +
+      '</div>' +
+    '</div>' +
+    '<img class="cinema-chairs" src="files/CinemaChairs.png" alt="" aria-hidden="true">';
+
+  document.body.appendChild(overlay);
+  var iframe = document.getElementById('cinema-iframe');
+  var idleTimer, active = false;
+
+  function setVideo(videoId) {
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId +
+      '?autoplay=1&mute=1&loop=1&playlist=' + videoId +
+      '&controls=0&showinfo=0&rel=0&modestbranding=1&start=5';
+    overlay.querySelectorAll('.cinema-canister-wrap').forEach(function(el) {
+      el.classList.toggle('active', el.dataset.vid === videoId);
+    });
+  }
 
   function enterCinema() {
     if (active) return;
     active = true;
-    // Preload video before revealing
-    iframe.src = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=0&showinfo=0&rel=0&modestbranding=1&start=12`;
+    setVideo(vid);
     overlay.classList.add('cinema-visible');
-    setTimeout(() => overlay.classList.add('curtains-in'), 150);
-    setTimeout(() => overlay.classList.add('screen-down'), 1300);
-    setTimeout(() => overlay.classList.add('meta-in'), 2600);
+    setTimeout(function() { overlay.classList.add('screen-down'); }, 200);
+    setTimeout(function() { overlay.classList.add('chairs-up');  }, 350);
+    setTimeout(function() { overlay.classList.add('meta-in');    }, 1400);
   }
 
   function exitCinema() {
@@ -801,9 +829,9 @@ function initCinemaMode() {
     overlay.style.transition = 'opacity 0.5s ease';
     overlay.style.opacity    = '0';
     overlay.style.pointerEvents = 'none';
-    setTimeout(() => {
+    setTimeout(function() {
       overlay.removeAttribute('style');
-      overlay.classList.remove('cinema-visible', 'curtains-in', 'screen-down', 'meta-in');
+      overlay.classList.remove('cinema-visible', 'screen-down', 'chairs-up', 'meta-in');
       iframe.src = '';
       resetTimer();
     }, 520);
@@ -814,12 +842,19 @@ function initCinemaMode() {
     idleTimer = setTimeout(enterCinema, IDLE_MS);
   }
 
-  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt =>
-    document.addEventListener(evt, () => active ? exitCinema() : resetTimer(), { passive: true })
-  );
+  document.getElementById('cinema-exit-btn').addEventListener('click', exitCinema);
+
+  overlay.querySelectorAll('.cinema-canister-wrap').forEach(function(el) {
+    el.addEventListener('click', function() { setVideo(el.dataset.vid); });
+  });
+
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(function(evt) {
+    document.addEventListener(evt, function() { if (!active) resetTimer(); }, { passive: true });
+  });
 
   resetTimer();
 }
+
 
 // ─── BIRTHDAY MODE ─── (annual easter egg)
 function initBirthdayMode() {

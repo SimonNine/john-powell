@@ -67,7 +67,7 @@ const COMPOSER = {
   composerPhoto: '',
 
   // Birthday easter egg — MM-DD format. Set '' to disable.
-  birthday: '09-18', // 18 September
+  birthday: '03-31', // 18 September
 
   copyrightYear: '2025'
 };
