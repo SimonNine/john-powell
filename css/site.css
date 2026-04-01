@@ -2153,7 +2153,7 @@ html.dark .type-pill-tv   { color: rgba(100,150,210,0.5); }
   width: 100%;
   height: 32vh; /* explicit height — required for object-fit to work on <img> */
   object-fit: cover;
-  object-position: center top;
+  object-position: center bottom;
   display: block;
   transform: translateY(100%);
   transition: transform 1.8s cubic-bezier(0.22,1,0.36,1) 0.2s;

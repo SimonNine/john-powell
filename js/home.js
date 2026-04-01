@@ -755,7 +755,7 @@ window.addEventListener('pageshow', function(e) {
 
 // ─── CINEMA MODE ─── (idle easter egg)
 function initCinemaMode() {
-  const IDLE_MS = 10 * 1000; // <- change to 90 * 1000 for production
+  const IDLE_MS = 90 * 1000;
   const c   = typeof COMPOSER !== 'undefined' ? COMPOSER : {};
   const vid = c.splashVideoId || c.bioVideoId || '';
   if (!vid) return;
@@ -864,9 +864,7 @@ function initBirthdayMode() {
   const today = new Date();
   const mm    = String(today.getMonth() + 1).padStart(2, '0');
   const dd    = String(today.getDate()).padStart(2, '0');
-  // DATE CHECK TEMPORARILY DISABLED FOR TESTING
-  // if (c.birthday !== `${mm}-${dd}`) return;
-  console.log('[BIRTHDAY] date check — birthday:', c.birthday, 'today:', mm + '-' + dd);
+  if (c.birthday !== `${mm}-${dd}`) return;
 
   // In-memory guard: shows once per page load, resets on any refresh
   if (window._bdaySeen) return;
