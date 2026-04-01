@@ -755,7 +755,7 @@ window.addEventListener('pageshow', function(e) {
 
 // ─── CINEMA MODE ─── (idle easter egg)
 function initCinemaMode() {
-  const IDLE_MS = 90 * 1000;
+  const IDLE_MS = 10 * 1000; // <- change to 90 * 1000 for production
   const c   = typeof COMPOSER !== 'undefined' ? COMPOSER : {};
   const vid = c.splashVideoId || c.bioVideoId || '';
   if (!vid) return;
