@@ -866,9 +866,8 @@ function initBirthdayMode() {
   const dd    = String(today.getDate()).padStart(2, '0');
   if (c.birthday !== `${mm}-${dd}`) return;
 
-  const seenKey = typeof storeKey === 'function' ? storeKey('bday-seen') : 'bday-seen';
-  if (sessionStorage.getItem(seenKey)) return;
-  sessionStorage.setItem(seenKey, '1');
+  // In-memory guard: shows once per page load, resets on any refresh
+  if (window._bdaySeen) return;
 
   const name    = c.nameDisplay || `${c.nameFirst} ${c.nameLast}`;
   const social  = c.social || {};
@@ -892,6 +891,7 @@ function initBirthdayMode() {
     </div>
   `;
   document.body.appendChild(overlay);
+  window._bdaySeen = true; // set AFTER successful append
 
   // Fade in after paint
   requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('bday-visible')));
