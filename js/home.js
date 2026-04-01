@@ -864,7 +864,9 @@ function initBirthdayMode() {
   const today = new Date();
   const mm    = String(today.getMonth() + 1).padStart(2, '0');
   const dd    = String(today.getDate()).padStart(2, '0');
-  if (c.birthday !== `${mm}-${dd}`) return;
+  // DATE CHECK TEMPORARILY DISABLED FOR TESTING
+  // if (c.birthday !== `${mm}-${dd}`) return;
+  console.log('[BIRTHDAY] date check — birthday:', c.birthday, 'today:', mm + '-' + dd);
 
   // In-memory guard: shows once per page load, resets on any refresh
   if (window._bdaySeen) return;

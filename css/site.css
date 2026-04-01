@@ -2181,7 +2181,7 @@ html.dark .type-pill-tv   { color: rgba(100,150,210,0.5); }
 #birthday-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9900;
+  z-index: 100001; /* above auth gate (99999) */
   background: rgba(4,4,4,0.97);
   display: flex;
   align-items: center;
